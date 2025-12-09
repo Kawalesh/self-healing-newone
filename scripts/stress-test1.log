@@ -1,0 +1,74 @@
+ Starting Stress Test...
+Duration: 120 seconds
+Concurrency: 20 requests
+Target: all
+
+ Checking service availability...
+ User Service is responding
+ Order Service is responding
+ AI Service is responding
+
+ Starting stress tests...
+Testing User Service at http://localhost:8081/hello
+
+ User Service Results:
+  Total Requests: 200
+  Errors: 0
+  Error Rate: 0%
+  Avg Response Time: 106.29ms
+  Requests/sec: 1.67
+Testing Order Service at http://localhost:8082/hello
+
+ Order Service Results:
+  Total Requests: 260
+  Errors: 0
+  Error Rate: 0%
+  Avg Response Time: 99.06ms
+  Requests/sec: 2.17
+Testing AI Service at http://localhost:8083/health
+
+ AI Service Results:
+  Total Requests: 260
+  Errors: 0
+  Error Rate: 0%
+  Avg Response Time: 98.6ms
+  Requests/sec: 2.17
+
+ Stress Test Summary:
+= * 50
+Measure-Object : The property "TotalRequests" cannot be found in the input for any objects.
+At C:\Users\Dell\cloud-native-observability\scripts\stress-test.ps1:152 char:30
++ ... quests = ($results | Measure-Object -Property TotalRequests -Sum).Sum
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
+    + FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+Measure-Object : The property "Errors" cannot be found in the input for any objects.
+At C:\Users\Dell\cloud-native-observability\scripts\stress-test.ps1:153 char:28
++ $totalErrors = ($results | Measure-Object -Property Errors -Sum).Sum
++                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
+    + FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+Measure-Object : The property "AvgResponseTime" cannot be found in the input for any objects.
+At C:\Users\Dell\cloud-native-observability\scripts\stress-test.ps1:155 char:32
++ ... ($results | Measure-Object -Property AvgResponseTime -Average).Averag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
+    + FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+Measure-Object : The property "RequestsPerSecond" cannot be found in the input for any objects.
+At C:\Users\Dell\cloud-native-observability\scripts\stress-test.ps1:156 char:25
++ ... PS = ($results | Measure-Object -Property RequestsPerSecond -Sum).Sum
++                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
+    + FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+Total Requests: 
+Total Errors: 
+Overall Error Rate: 0%
+Average Response Time: 0ms
+Total Requests/sec: 0
+
+ Performance Analysis:
+ Excellent error rate (< 1%)
+ Excellent response time (< 100ms)
+ Low throughput (< 50 req/sec) - scalability issues
+
+ Stress test completed!

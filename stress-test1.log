@@ -1,0 +1,123 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20251106214551
+Username: SKAWALE\Dell
+RunAs User: SKAWALE\Dell
+Configuration Name: 
+Machine: SKAWALE (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 26156
+PSVersion: 5.1.26100.7019
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7019
+BuildVersion: 10.0.26100.7019
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\stress-test1.log
+PS C:\Users\Dell\cloud-native-observability> .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling
+of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\Dell\cloud-native-observability> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20251106214551
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20251106214712
+Username: SKAWALE\Dell
+RunAs User: SKAWALE\Dell
+Configuration Name: 
+Machine: SKAWALE (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 26156
+PSVersion: 5.1.26100.7019
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7019
+BuildVersion: 10.0.26100.7019
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\stress-test1.log
+PS C:\Users\Dell\cloud-native-observability> .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling
+of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\Dell\cloud-native-observability> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20251106214712
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20251106214753
+Username: SKAWALE\Dell
+RunAs User: SKAWALE\Dell
+Configuration Name: 
+Machine: SKAWALE (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 26156
+PSVersion: 5.1.26100.7019
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.7019
+BuildVersion: 10.0.26100.7019
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\stress-test1.log
+PS C:\Users\Dell\cloud-native-observability> .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try 
+again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+.\stress-test.ps1 : The term '.\stress-test.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling
+of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ .\stress-test.ps1 -Duration 120 -Concurrency 20 -TargetService all
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\stress-test.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\Dell\cloud-native-observability> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20251106214753
+**********************

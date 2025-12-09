@@ -1,0 +1,10 @@
+com\observability\orderservice\dto\OrderDTO.class
+com\observability\orderservice\service\OrderService.class
+com\observability\orderservice\model\Order$OrderStatus.class
+com\observability\orderservice\controller\OrderController.class
+com\observability\orderservice\OrderServiceApplication$HealthController.class
+com\observability\orderservice\config\TracingConfig.class
+com\observability\orderservice\model\Order.class
+com\observability\orderservice\OrderServiceApplication.class
+com\observability\orderservice\client\UserServiceClient.class
+com\observability\orderservice\repository\OrderRepository.class

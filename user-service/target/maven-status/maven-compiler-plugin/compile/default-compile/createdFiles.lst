@@ -1,0 +1,8 @@
+com\observability\userservice\UserServiceApplication$HealthController.class
+com\observability\userservice\UserServiceApplication.class
+com\observability\userservice\config\TracingConfig.class
+com\observability\userservice\dto\UserDTO.class
+com\observability\userservice\model\User.class
+com\observability\userservice\repository\UserRepository.class
+com\observability\userservice\service\UserService.class
+com\observability\userservice\controller\UserController.class

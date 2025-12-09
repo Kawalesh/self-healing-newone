@@ -1,0 +1,24 @@
+services:
+  user-service:
+    build: .
+    depends_on:
+      - postgres-user
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres-user:5432/usersdb
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+    networks:
+      - app-net
+
+  postgres-user:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: usersdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - app-net
+
+networks:
+  app-net:

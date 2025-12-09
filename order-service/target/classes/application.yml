@@ -1,0 +1,71 @@
+server:
+  port: 8082
+
+#spring:
+#  application:
+#    name: order-service
+#  datasource:
+#    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/ordersdb}
+#    driver-class-name: org.postgresql.Driver
+#    username: ${DATABASE_USERNAME:postgres}
+#    password: ${DATABASE_PASSWORD:postgres}
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: ${DDL_AUTO:update}
+#    show-sql: ${SHOW_SQL:true}
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/ordersdb}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    show-sql: ${SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    com.observability: DEBUG
+    org.springframework.web: DEBUG
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+  file:
+    name: /var/log/order-service.log
+
+# User Service URL (for inter-service communication)
+user:
+  service:
+    url: http://localhost:8081
+
+# Jaeger configuration
+opentelemetry:
+  tracer:
+    name: order-service
+  jaeger:
+    endpoint: http://localhost:14268/api/traces
