@@ -1,24 +1,71 @@
+# server:
+#   port: 8082
+
+# spring:
+#   datasource:
+#     url: ${DATABASE_URL}
+#     username: ${DATABASE_USERNAME}
+#     password: ${DATABASE_PASSWORD}
+#     driver-class-name: org.postgresql.Driver
+
+#   jpa:
+#     hibernate:
+#       ddl-auto: update
+#     show-sql: false
+
+# user:
+#   service:
+#     url: ${USER_SERVICE_URL:http://user-service:8081}
+
+# logging:
+#   level:
+#     com.observability: INFO
+#     org.springframework.web: INFO
+#     org.hibernate: WARN
 server:
   port: 8082
 
 spring:
+  application:
+    name: order-service
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL:jdbc:postgresql://postgres-order:5432/ordersdb}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DDL_AUTO:update}
     show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
 
 user:
   service:
     url: ${USER_SERVICE_URL:http://user-service:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+     export:
+      prometheus:
+       enabled: true
 
 logging:
   level:
     com.observability: INFO
     org.springframework.web: INFO
     org.hibernate: WARN
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+  file:
+    name: /var/log/order-service.log

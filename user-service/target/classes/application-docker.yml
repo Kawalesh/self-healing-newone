@@ -1,24 +1,69 @@
-services:
-  user-service:
-    build: .
-    depends_on:
-      - postgres-user
-    environment:
-      DATABASE_URL: jdbc:postgresql://postgres-user:5432/usersdb
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: postgres
-    networks:
-      - app-net
+# server:
+#   port: 8081
+# services:
+#   user-service:
+#     build: .
+#     depends_on:
+#       - postgres-user
+#     environment:
+#       DATABASE_URL: jdbc:postgresql://postgres-user:5432/usersdb
+#       DATABASE_USERNAME: postgres
+#       DATABASE_PASSWORD: postgres
+#     networks:
+#       - app-net
 
-  postgres-user:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_DB: usersdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    networks:
-      - app-net
+#   postgres-user:
+#     image: postgres:15
+#     restart: always
+#     environment:
+#       POSTGRES_DB: usersdb
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#     networks:
+#       - app-net
 
-networks:
-  app-net:
+# networks:
+#   app-net:
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://postgres-user:5432/usersdb}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    com.observability: INFO
+    org.springframework.web: INFO
+    org.hibernate: WARN
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+  file:
+    name: /var/log/user-service.log
