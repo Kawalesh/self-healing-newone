@@ -28,7 +28,7 @@ public class OrderController {
     private final OrderService orderService;
     private final Tracer tracer;
     
-    @Autowired
+
     public OrderController(OrderService orderService, Tracer tracer) {
         this.orderService = orderService;
         this.tracer = tracer;

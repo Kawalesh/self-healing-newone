@@ -61,7 +61,37 @@ logging:
 # User Service URL (for inter-service communication)
 user:
   service:
-    url: http://localhost:8081
+    url: ${USER_SERVICE_URL:http://localhost:8081}
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.reactive.function.client.WebClientException
+          - java.util.concurrent.TimeoutException
+          - java.net.ConnectException
+  retry:
+    instances:
+      userService:
+        maxAttempts: 3
+        waitDuration: 1s
+        retryExceptions:
+          - org.springframework.web.reactive.function.client.WebClientException
+          - java.util.concurrent.TimeoutException
+  timelimiter:
+    instances:
+      userService:
+        timeoutDuration: 5s
 
 # Jaeger configuration
 opentelemetry:

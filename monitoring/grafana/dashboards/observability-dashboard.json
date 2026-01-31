@@ -63,7 +63,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0
               }
             ]
           },
@@ -90,38 +90,14 @@
       },
       "targets": [
         {
-          "expr": "up",
+          "expr": "up{job=~\"user-service|order-service\"}",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{job}}",
           "refId": "A"
         }
       ],
       "title": "Service Health",
       "type": "timeseries"
-    },
-    {
-      "datasource": "Loki",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "expr": "{service=~\"user-service|order-service|ai-anomaly-detection\"}",
-          "refId": "A"
-        }
-      ],
-      "title": "Service Logs",
-      "type": "logs"
     },
     {
       "datasource": "Prometheus",
@@ -179,8 +155,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 8
+        "x": 12,
+        "y": 0
       },
       "id": 3,
       "options": {
@@ -195,13 +171,13 @@
       },
       "targets": [
         {
-          "expr": "rate(process_cpu_seconds_total[5m]) * 100",
+          "expr": "process_cpu_usage{job=~\"user-service|order-service\"} * 100",
           "interval": "",
-          "legendFormat": "{{instance}} CPU",
+          "legendFormat": "{{job}} CPU",
           "refId": "A"
         }
       ],
-      "title": "CPU Usage",
+      "title": "CPU Usage (%)",
       "type": "timeseries"
     },
     {
@@ -260,7 +236,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 8
       },
       "id": 4,
@@ -276,13 +252,13 @@
       },
       "targets": [
         {
-          "expr": "jvm_memory_used_bytes",
+          "expr": "jvm_memory_used_bytes{job=~\"user-service|order-service\", area=\"heap\"}",
           "interval": "",
-          "legendFormat": "{{instance}} Memory",
+          "legendFormat": "{{job}} - {{id}}",
           "refId": "A"
         }
       ],
-      "title": "Memory Usage",
+      "title": "Memory Usage (Heap)",
       "type": "timeseries"
     },
     {
@@ -330,7 +306,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 1
               }
             ]
           },
@@ -341,8 +317,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 16
+        "x": 12,
+        "y": 8
       },
       "id": 5,
       "options": {
@@ -357,13 +333,19 @@
       },
       "targets": [
         {
-          "expr": "http_request_duration_seconds",
+          "expr": "histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{job=~\"user-service|order-service\"}[5m]))",
           "interval": "",
-          "legendFormat": "{{instance}} Response Time",
+          "legendFormat": "{{job}} - p95",
           "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{job=~\"user-service|order-service\"}[5m]))",
+          "interval": "",
+          "legendFormat": "{{job}} - p99",
+          "refId": "B"
         }
       ],
-      "title": "Response Time",
+      "title": "Response Time (95th & 99th Percentile)",
       "type": "timeseries"
     },
     {
@@ -422,7 +404,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 16
       },
       "id": 6,
@@ -438,14 +420,174 @@
       },
       "targets": [
         {
-          "expr": "rate(http_requests_total[5m])",
+          "expr": "rate(http_server_requests_seconds_count{job=~\"user-service|order-service\"}[5m])",
           "interval": "",
-          "legendFormat": "{{instance}} RPS",
+          "legendFormat": "{{job}} - {{uri}}",
           "refId": "A"
         }
       ],
-      "title": "Request Rate",
+      "title": "Request Rate (Requests per Second)",
       "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "vis": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(http_server_requests_seconds_count{job=~\"user-service|order-service\", status=~\"5..\"}[5m]) / rate(http_server_requests_seconds_count{job=~\"user-service|order-service\"}[5m])",
+          "interval": "",
+          "legendFormat": "{{job}} Error Rate",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "OPEN"
+                },
+                "1": {
+                  "color": "yellow",
+                  "index": 2,
+                  "text": "HALF_OPEN"
+                },
+                "2": {
+                  "color": "green",
+                  "index": 3,
+                  "text": "CLOSED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 2
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 8,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "8.0.0",
+      "targets": [
+        {
+          "expr": "resilience4j_circuitbreaker_state{name=\"userService\"}",
+          "interval": "",
+          "legendFormat": "Circuit Breaker State",
+          "refId": "A"
+        }
+      ],
+      "title": "Circuit Breaker State (0=OPEN, 1=HALF_OPEN, 2=CLOSED)",
+      "type": "gauge"
     }
   ],
   "schemaVersion": 27,

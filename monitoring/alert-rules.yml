@@ -1,0 +1,82 @@
+groups:
+  - name: service_health
+    interval: 10s
+    rules:
+      - alert: ServiceDown
+        expr: up{job=~"user-service|order-service"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          component: service
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 30 seconds. Container should auto-restart."
+
+      - alert: ServiceHighErrorRate
+        expr: |
+          rate(http_server_requests_seconds_count{status=~"5..",job=~"user-service|order-service"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          component: service
+        annotations:
+          summary: "High error rate in {{ $labels.job }}"
+          description: "Service {{ $labels.job }} has error rate > 10% for 2 minutes"
+
+      - alert: ServiceHighLatency
+        expr: |
+          histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{job=~"user-service|order-service"}[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: service
+        annotations:
+          summary: "High latency in {{ $labels.job }}"
+          description: "95th percentile latency in {{ $labels.job }} is > 1s for 5 minutes"
+
+      - alert: DatabaseConnectionFailure
+        expr: |
+          jdbc_connections_active{job=~"user-service|order-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection failure in {{ $labels.job }}"
+          description: "Service {{ $labels.job }} cannot connect to database"
+
+      - alert: CircuitBreakerOpen
+        expr: |
+          resilience4j_circuitbreaker_state{state="open"} == 1
+        for: 1m
+        labels:
+          severity: warning
+          component: resilience
+        annotations:
+          summary: "Circuit breaker is OPEN in {{ $labels.name }}"
+          description: "Circuit breaker {{ $labels.name }} is open, indicating service failures"
+
+      - alert: HighMemoryUsage
+        expr: |
+          jvm_memory_used_bytes{job=~"user-service|order-service"} / jvm_memory_max_bytes{job=~"user-service|order-service"} > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: resource
+        annotations:
+          summary: "High memory usage in {{ $labels.job }}"
+          description: "Memory usage in {{ $labels.job }} is above 90% for 5 minutes"
+
+      - alert: HighCPUUsage
+        expr: |
+          process_cpu_usage{job=~"user-service|order-service"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: resource
+        annotations:
+          summary: "High CPU usage in {{ $labels.job }}"
+          description: "CPU usage in {{ $labels.job }} is above 80% for 5 minutes"
+
+
+
