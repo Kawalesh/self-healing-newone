@@ -222,6 +222,7 @@ services:
     ports:
       - "8081:8081"
     environment:
+      TZ: Asia/Kolkata
       SPRING_PROFILES_ACTIVE: docker
       DATABASE_URL: jdbc:postgresql://postgres-user:5432/usersdb
       DATABASE_USERNAME: postgres
@@ -246,6 +247,7 @@ services:
     ports:
       - "8082:8082"
     environment:
+      TZ: Asia/Kolkata
       SPRING_PROFILES_ACTIVE: docker
       DATABASE_URL: jdbc:postgresql://postgres-order:5432/ordersdb
       DATABASE_USERNAME: postgres

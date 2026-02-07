@@ -55,7 +55,9 @@ public class OrderService {
 
 			// Validate user exists
 			if (!userServiceClient.userExists(orderDTO.getUserId())) {
-				throw new IllegalArgumentException("User not found with ID: " + orderDTO.getUserId());
+				throw new IllegalArgumentException(
+					"User not found with ID: " + orderDTO.getUserId() +
+					". Create the user first via the Users section or POST /api/users.");
 			}
 
 			// Calculate total amount

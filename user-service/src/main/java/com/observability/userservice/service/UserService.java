@@ -158,15 +158,23 @@ public class UserService {
 	}
 
 	public boolean userExists(Long userId) {
-		try {
-			logger.debug("Checking if user exists: {}", userId);
-			return userRepository.existsById(userId);
-		} catch (Exception e) {
-			logger.error("Error checking user existence for userId: {}", userId, e);
-			// Return false on error to prevent blocking order creation
-			return false;
-		}
+		logger.info("Inside userExists Checking if user exists: {}", userId);
+	    if (userId == null) {
+	    	logger.info("Checking if user exists: null {}", userId);
+	        return false;
+	    }
+
+	    try {
+	        logger.info("Checking if user exists: {}", userId);
+	        return userRepository.existsById(userId);
+
+	    } catch (Exception ex) {   // ✅ catch Exception ONLY
+	    	logger.error("check error");
+	        logger.error("Failed to check user existence for userId={}", userId, ex);
+	        throw ex;              // ✅ DO NOT swallow it
+	    }
 	}
+
 
 	public long getActiveUserCount() {
 		return userRepository.countActiveUsers();

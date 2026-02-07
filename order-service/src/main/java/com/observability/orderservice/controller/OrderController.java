@@ -8,7 +8,6 @@ import io.micrometer.tracing.Tracer;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +80,7 @@ public class OrderController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<?> getOrderById(@PathVariable("id") Long id) {
         Span span = tracer.nextSpan().name("getOrderById").start();
         try {
             logger.info("GET /api/orders/{} - Fetching order", id);
@@ -105,7 +104,7 @@ public class OrderController {
     }
     
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByUserId(@PathVariable("userId") Long userId) {
         Span span = tracer.nextSpan().name("getOrdersByUserId").start();
         try {
             logger.info("GET /api/orders/user/{} - Fetching orders for user", userId);
@@ -125,7 +124,7 @@ public class OrderController {
     }
     
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByStatus(@PathVariable String status) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByStatus(@PathVariable("status") String status) {
         Span span = tracer.nextSpan().name("getOrdersByStatus").start();
         try {
             logger.info("GET /api/orders/status/{} - Fetching orders by status", status);
@@ -151,7 +150,7 @@ public class OrderController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<?> updateOrder(@PathVariable("id") Long id, @Valid @RequestBody OrderDTO orderDTO) {
         Span span = tracer.nextSpan().name("updateOrder").start();
         try {
             logger.info("PUT /api/orders/{} - Updating order", id);
@@ -174,7 +173,7 @@ public class OrderController {
     }
     
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @RequestBody Map<String, String> statusMap) {
+    public ResponseEntity<?> updateOrderStatus(@PathVariable("id") Long id, @RequestBody Map<String, String> statusMap) {
         Span span = tracer.nextSpan().name("updateOrderStatus").start();
         try {
             logger.info("PATCH /api/orders/{}/status - Updating order status", id);
@@ -210,7 +209,7 @@ public class OrderController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancelOrder(@PathVariable Long id) {
+    public ResponseEntity<?> cancelOrder(@PathVariable("id") Long id) {
         Span span = tracer.nextSpan().name("cancelOrder").start();
         try {
             logger.info("DELETE /api/orders/{} - Cancelling order", id);

@@ -87,7 +87,7 @@ public class UserController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
         Span span = tracer.nextSpan().name("getUserById").start();
         try {
             logger.info("GET /api/users/{} - Fetching user", id);
@@ -111,7 +111,7 @@ public class UserController {
     }
     
     @GetMapping("/username/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<?> getUserByUsername(@PathVariable("username") String username) {
         Span span = tracer.nextSpan().name("getUserByUsername").start();
         try {
             logger.info("GET /api/users/username/{} - Fetching user", username);
@@ -135,7 +135,7 @@ public class UserController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserDTO userDTO) {
         Span span = tracer.nextSpan().name("updateUser").start();
         try {
             logger.info("PUT /api/users/{} - Updating user", id);
@@ -158,7 +158,7 @@ public class UserController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         Span span = tracer.nextSpan().name("deleteUser").start();
         try {
             logger.info("DELETE /api/users/{} - Deleting user", id);
@@ -181,7 +181,7 @@ public class UserController {
     }
     
     @PostMapping("/{id}/login")
-    public ResponseEntity<?> recordLogin(@PathVariable Long id) {
+    public ResponseEntity<?> recordLogin(@PathVariable("id") Long id) {
         Span span = tracer.nextSpan().name("recordLogin").start();
         try {
             logger.info("POST /api/users/{}/login - Recording login", id);
@@ -219,24 +219,24 @@ public class UserController {
     }
     
     @GetMapping("/{id}/exists")
-    public ResponseEntity<Map<String, Boolean>> checkUserExists(@PathVariable Long id) {
-        Span span = tracer.nextSpan().name("checkUserExists").start();
+    public ResponseEntity<Map<String, Boolean>> checkUserExists(@PathVariable("id") Long id) {
+        Span span = null;
         try {
-            logger.debug("GET /api/users/{}/exists - Checking user existence", id);
-            span.tag("user.id", id.toString());
+            span = tracer.nextSpan().name("checkUserExists").start();
+            logger.info("GET /api/users/{}/exists - checking user existence", id);
+            try { span.tag("user.id", String.valueOf(id)); } catch (Throwable t) { /* ignore */ }
             
             boolean exists = userService.userExists(id);
-            span.tag("user.exists", String.valueOf(exists));
+            logger.info("GET /api/users/{}/exists -> exists={}", id, exists);
+            try { span.tag("user.exists", String.valueOf(exists)); } catch (Throwable t) { /* ignore */ }
             
             return ResponseEntity.ok(Map.of("exists", exists));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("Error checking user existence for ID: {}", id, e);
-            span.error(e);
-            // Return false on error to allow order creation to proceed
-            // In production, you might want to return an error response instead
+            if (span != null) { try { span.error(e); } catch (Throwable t) { /* ignore */ } }
             return ResponseEntity.ok(Map.of("exists", false));
         } finally {
-            span.end();
+            if (span != null) { try { span.end(); } catch (Throwable t) { /* ignore */ } }
         }
     }
 }

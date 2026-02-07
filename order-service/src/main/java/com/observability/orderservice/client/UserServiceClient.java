@@ -50,32 +50,43 @@ public class UserServiceClient {
     }
 
 
+    @SuppressWarnings("unchecked")
     public boolean userExists(Long userId) {
+        logger.info("Checking user existence for userId={} (GET /api/users/{}/exists)", userId, userId);
         try {
-            logger.debug("Checking if user exists: {}", userId);
-
-            Supplier<Boolean> supplier = () -> webClient.get()
-                    .uri("/api/users/{id}/exists", userId)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .retrieve()
-                    .bodyToMono(Boolean.class)   // ✅ FIX
-                    .timeout(Duration.ofSeconds(5))
-                    .block();
+            Supplier<Boolean> supplier = () ->
+                    webClient.get()
+                            .uri("/api/users/{id}/exists", userId)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .exchangeToMono(response -> {
+                                if (response.statusCode().is2xxSuccessful()) {
+                                    return response.bodyToMono(Map.class)
+                                            .map(body -> {
+                                                Object existsVal = body != null ? body.get("exists") : null;
+                                                boolean exists = Boolean.TRUE.equals(existsVal)
+                                                        || "true".equalsIgnoreCase(String.valueOf(existsVal));
+                                                logger.info("User {} exists: {} (from user-service)", userId, exists);
+                                                return exists;
+                                            });
+                                }
+                                logger.warn("User-service returned non-2xx for /api/users/{}/exists: {}", userId, response.statusCode());
+                                return Mono.just(false);
+                            })
+                            .timeout(Duration.ofSeconds(5))
+                            .block();
 
             Supplier<Boolean> retrySupplier = Retry.decorateSupplier(retry, supplier);
             Supplier<Boolean> decoratedSupplier =
                     CircuitBreaker.decorateSupplier(circuitBreaker, retrySupplier);
 
-            Boolean exists = decoratedSupplier.get();
+            return Boolean.TRUE.equals(decoratedSupplier.get());
 
-            return Boolean.TRUE.equals(exists);
-
-        } catch (Exception e) {
-            logger.error("❌ Error checking user existence [{}]: {}",
-                    userId, e.getMessage(), e);
+        } catch (Throwable e) {
+            logger.error("❌ Error checking user existence [{}]: {}", userId, e.getMessage(), e);
             return false;
         }
     }
+
 
 
     public Mono<Boolean> userExistsAsync(Long userId) {

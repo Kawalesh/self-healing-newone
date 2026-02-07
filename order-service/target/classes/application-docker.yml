@@ -45,7 +45,7 @@ spring:
 user:
   service:
 #    url: ${USER_SERVICE_URL:http://user-service:8081
-     url: http://user-service:8081
+    url: ${USER_SERVICE_URL:http://user-service:8081}
 
 # Resilience4j Circuit Breaker Configuration
 resilience4j:
